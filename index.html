@@ -38,6 +38,148 @@ h1 {
   margin-top: 0.4rem;
 }
 
+
+/* ABAS DE NAVEGAÇÃO */
+.nav-tabs {
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid #222;
+  padding-bottom: 0;
+}
+.nav-tab {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #555;
+  background: transparent;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all .2s;
+}
+.nav-tab:hover { color: #aaa; }
+.nav-tab.active { color: #F5C518; border-bottom-color: #F5C518; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* RANKING TABLE */
+.ranking-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.ranking-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.ranking-update {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  color: #555;
+  letter-spacing: 1px;
+}
+.ranking-prize {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.prize-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  text-align: center;
+}
+.prize-pos {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  color: #888;
+}
+.prize-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: #F5C518;
+}
+.rtable {
+  width: 100%;
+  border-collapse: collapse;
+}
+.rtable thead tr {
+  background: #111;
+  border-bottom: 2px solid #222;
+}
+.rtable th {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #555;
+  padding: 0.8rem 1rem;
+  text-align: left;
+}
+.rtable th.center { text-align: center; }
+.rtable tbody tr {
+  border-bottom: 1px solid #1a1a1a;
+  transition: background .15s;
+}
+.rtable tbody tr:hover { background: #111; }
+.rtable td {
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+}
+.rtable td.center { text-align: center; }
+.rank-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  color: #555;
+  width: 40px;
+}
+.rank-num.gold { color: #F5C518; }
+.rank-num.silver { color: #aaa; }
+.rank-num.bronze { color: #cd7f32; }
+.rank-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+.rank-pts {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: #F5C518;
+}
+.rank-move {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.move-up { color: #2ecc71; }
+.move-down { color: #e74c3c; }
+.move-same { color: #555; }
+.rank-bar-wrap {
+  width: 120px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+}
+.rank-bar {
+  height: 6px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #006847, #F5C518);
+}
+
 /* PLACAR AO VIVO */
 .live-section { max-width: 1100px; margin: 0 auto 2rem; }
 .live-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: #555; text-align: center; margin-bottom: 0.8rem; }
@@ -352,12 +494,12 @@ buildChart('all');
 <script>
 const flagMap = {"Mexico":"🇲🇽","South Africa":"🇿🇦","South Korea":"🇰🇷","Czech Republic":"🇨🇿","Canada":"🇨🇦","Bosnia and Herzegovina":"🇧🇦","Qatar":"🇶🇦","Switzerland":"🇨🇭","Brazil":"🇧🇷","Morocco":"🇲🇦","Haiti":"🇭🇹","Scotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿","USA":"🇺🇸","United States":"🇺🇸","Paraguay":"🇵🇾","Australia":"🇦🇺","Turkey":"🇹🇷","Germany":"🇩🇪","Ivory Coast":"🇨🇮","Curacao":"🇨🇼","Ecuador":"🇪🇨","Netherlands":"🇳🇱","Japan":"🇯🇵","Sweden":"🇸🇪","Tunisia":"🇹🇳","Belgium":"🇧🇪","Egypt":"🇪🇬","Iran":"🇮🇷","New Zealand":"🇳🇿","Spain":"🇪🇸","Cape Verde":"🇨🇻","Saudi Arabia":"🇸🇦","Uruguay":"🇺🇾","France":"🇫🇷","Senegal":"🇸🇳","Iraq":"🇮🇶","Norway":"🇳🇴","Argentina":"🇦🇷","Algeria":"🇩🇿","Austria":"🇦🇹","Jordan":"🇯🇴","Portugal":"🇵🇹","DR Congo":"🇨🇩","England":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","Croatia":"🇭🇷","Ghana":"🇬🇭","Panama":"🇵🇦","Uzbekistan":"🇺🇿","Colombia":"🇨🇴"};
 const API = "https://www.thesportsdb.com/api/v1/json/3";
-const LID = "4480";
+const LID = "4429"; // FIFA World Cup - ID correto TheSportsDB
 function flag(n){return flagMap[n]||"⚽";}
 function fmtTime(s){if(!s)return"";const d=new Date(s);return d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:"America/Sao_Paulo"});}
 function fmtDate(s){if(!s)return"";const d=new Date(s);return d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",timeZone:"America/Sao_Paulo"});}
 
-async function fetchLive(){try{const r=await fetch(`${API}/eventslive.php?sport=Soccer`);const d=await r.json();return(d.events||[]).filter(e=>e.strLeague&&e.strLeague.toLowerCase().includes("world cup")&&e.strLeague.includes("2026"));}catch{return[];}}
+async function fetchLive(){try{const r=await fetch(`${API}/eventslive.php?sport=Soccer`);const d=await r.json();return(d.events||[]).filter(e=>e.idLeague==="4429"||e.idLeague===4429||(e.strLeague&&e.strLeague.toLowerCase().includes("world cup")&&!e.strLeague.toLowerCase().includes("women")));}catch{return[];}}
 async function fetchNext(){try{const r=await fetch(`${API}/eventsnextleague.php?id=${LID}`);const d=await r.json();return d.events||[];}catch{return[];}}
 async function fetchLast(){try{const r=await fetch(`${API}/eventspastleague.php?id=${LID}`);const d=await r.json();return d.events||[];}catch{return[];}}
 
@@ -417,5 +559,125 @@ async function updateScores(){
 
 updateScores();
 </script>
+
+
+</div><!-- fim tab-grafico -->
+
+<!-- ABA RANKING -->
+<div id="tab-ranking" class="tab-content">
+  <div class="ranking-wrap">
+
+    <div class="ranking-header">
+      <div>
+        <div class="section-title" style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:#F5C518">🏆 Ranking Geral</div>
+        <div class="ranking-update" id="ranking-jogos">Após 14 jogos · Rodada 1</div>
+      </div>
+      <div class="ranking-prize">
+        <div class="prize-card" style="border-color:#F5C518">
+          <div class="prize-pos">🥇 1º lugar</div>
+          <div class="prize-val">R$ 345</div>
+        </div>
+        <div class="prize-card" style="border-color:#aaa">
+          <div class="prize-pos">🥈 2º lugar</div>
+          <div class="prize-val">R$ 207</div>
+        </div>
+        <div class="prize-card" style="border-color:#cd7f32">
+          <div class="prize-pos">🥉 3º lugar</div>
+          <div class="prize-val">R$ 138</div>
+        </div>
+      </div>
+    </div>
+
+    <table class="rtable">
+      <thead>
+        <tr>
+          <th class="center">#</th>
+          <th>Participante</th>
+          <th class="center">Pts</th>
+          <th class="center">Mov.</th>
+          <th>Progresso</th>
+        </tr>
+      </thead>
+      <tbody id="ranking-body"></tbody>
+    </table>
+
+    <div style="margin-top:1rem;font-size:0.8rem;color:#444;font-family:'Barlow Condensed',sans-serif;text-align:center">
+      Atualize os dados editando o array <code style="color:#F5C518">rankingData</code> no script abaixo
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+// RANKING — ATUALIZE AQUI APÓS CADA RODADA
+// pos_ant = posição anterior | mov = variação
+// ══════════════════════════════════════════════════
+const rankingData = [
+  { pos: 1,  nome: "Daniel Amaral",      pts: 125, pos_ant: 1  },
+  { pos: 2,  nome: "Yuri Alkmim",        pts: 119, pos_ant: 5  },
+  { pos: 3,  nome: "João Otávio",        pts: 116, pos_ant: 2  },
+  { pos: 4,  nome: "Bernardo Bastos",    pts: 115, pos_ant: 3  },
+  { pos: 5,  nome: "João Spido",         pts: 112, pos_ant: 4  },
+  { pos: 6,  nome: "Pedro Bottany",      pts: 108, pos_ant: 6  },
+  { pos: 7,  nome: "Bruno Mourão",       pts: 97,  pos_ant: 7  },
+  { pos: 8,  nome: "Paulo Sérgio",       pts: 97,  pos_ant: 8  },
+  { pos: 9,  nome: "Pedro Damique",      pts: 97,  pos_ant: 9  },
+  { pos: 10, nome: "Igor Chiappetta",    pts: 96,  pos_ant: 10 },
+  { pos: 11, nome: "João Pedro",         pts: 93,  pos_ant: 10 },
+  { pos: 12, nome: "Daniel Mourão",      pts: 92,  pos_ant: 12 },
+  { pos: 13, nome: "Bernard Haus",       pts: 84,  pos_ant: 13 },
+  { pos: 14, nome: "Pedro Longo",        pts: 74,  pos_ant: 14 },
+  { pos: 15, nome: "Matheus Roro",       pts: 73,  pos_ant: 16 },
+  { pos: 16, nome: "Jefferson Raphael",  pts: 71,  pos_ant: 14 },
+  { pos: 17, nome: "Danilo Belinguinho", pts: 67,  pos_ant: 17 },
+  { pos: 18, nome: "Rafael Licurgo",     pts: 65,  pos_ant: 18 },
+  { pos: 19, nome: "Pablo Andres",       pts: 56,  pos_ant: 19 },
+  { pos: 20, nome: "Lucas Santos",       pts: 56,  pos_ant: 21 },
+  { pos: 21, nome: "João Dabul",         pts: 53,  pos_ant: 19 },
+  { pos: 22, nome: "Pedro Gonçalves",    pts: 31,  pos_ant: 22 },
+  { pos: 23, nome: "Cicero Demetrio",    pts: 23,  pos_ant: 23 },
+];
+
+const maxPts = Math.max(...rankingData.map(r => r.pts));
+const rankColors = { 1: 'gold', 2: 'silver', 3: 'bronze' };
+
+function buildRanking() {
+  const tbody = document.getElementById('ranking-body');
+  tbody.innerHTML = rankingData.map(r => {
+    const mov = r.pos_ant - r.pos;
+    const movHtml = mov > 0
+      ? `<span class="rank-move move-up">▲ +${mov}</span>`
+      : mov < 0
+      ? `<span class="rank-move move-down">▼ ${mov}</span>`
+      : `<span class="rank-move move-same">—</span>`;
+
+    const barWidth = Math.round((r.pts / maxPts) * 100);
+    const numClass = rankColors[r.pos] ? `rank-num ${rankColors[r.pos]}` : 'rank-num';
+    const medalha = r.pos === 1 ? '🥇' : r.pos === 2 ? '🥈' : r.pos === 3 ? '🥉' : '';
+
+    return `<tr>
+      <td class="center"><span class="${numClass}">${medalha || r.pos}</span></td>
+      <td><span class="rank-name">${r.nome}</span></td>
+      <td class="center"><span class="rank-pts">${r.pts}</span></td>
+      <td class="center">${movHtml}</td>
+      <td>
+        <div class="rank-bar-wrap">
+          <div class="rank-bar" style="width:${barWidth}%"></div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+buildRanking();
+
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
 </body>
 </html>
