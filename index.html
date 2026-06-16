@@ -410,11 +410,17 @@ canvas {
 </header>
 
 
-<!-- PLACAR AO VIVO -->
+<!-- PLACAR AO VIVO — ScoreAxis -->
 <div class="live-section">
-  <div class="live-title">⚡ Copa do Mundo 2026 — Jogos</div>
-  <div class="live-card" id="live-card">
-    <span class="live-empty">Carregando...</span>
+  <div class="live-title">⚡ Copa do Mundo 2026 — Jogos do Dia</div>
+  <div style="max-width:1100px;margin:0 auto;border-radius:12px;overflow:hidden;border:1px solid #222;">
+    <iframe
+      src="https://www.scoreaxis.com/widget/live-games/4480?autoHeight=1&font=0&fontSize=14&bodyColor=111111&textColor=e8e8e8&linkColor=F5C518&borderColor=222222&showLeagueName=1"
+      style="width:100%;border:none;min-height:300px;display:block;background:#111"
+      scrolling="no"
+      allowtransparency="true"
+      id="scoreaxis-iframe"
+    ></iframe>
   </div>
 </div>
 
@@ -600,90 +606,9 @@ function flag(n){return flagMap[n]||"⚽";}
 function fmtTime(s){if(!s)return"";const d=new Date(s);return d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:"America/Sao_Paulo"});}
 function fmtDate(s){if(!s)return"";const d=new Date(s);return d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",timeZone:"America/Sao_Paulo"});}
 
-// Seleciona apenas jogos da Copa do Mundo do dia
-function isToday(dateStr) {
-  if(!dateStr) return false;
-  const d = new Date(dateStr);
-  const today = new Date();
-  return d.toDateString() === today.toDateString();
-}
-
-async function fetchTodayWC() {
-  try {
-    // Busca jogos ao vivo
-    const rLive = await fetch(`${API}/eventslive.php?sport=Soccer`);
-    const dLive = await rLive.json();
-    const live = (dLive.events||[]).filter(e =>
-      e.idLeague==="4429"||e.idLeague===4429||
-      (e.strLeague&&e.strLeague.toLowerCase().includes("world cup")&&!e.strLeague.toLowerCase().includes("women"))
-    );
-
-    // Busca próximos
-    const rNext = await fetch(`${API}/eventsnextleague.php?id=${LID}`);
-    const dNext = await rNext.json();
-    const next = (dNext.events||[]).filter(e => isToday(e.dateEvent));
-
-    // Busca finalizados do dia
-    const rLast = await fetch(`${API}/eventspastleague.php?id=${LID}`);
-    const dLast = await rLast.json();
-    const past = (dLast.events||[]).filter(e => isToday(e.dateEvent));
-
-    return { live, next, past };
-  } catch(e) { return { live:[], next:[], past:[] }; }
-}
-
-function makeCard(e, status) {
-  const isLive = status === 'live';
-  const isDone = status === 'done';
-  const cardClass = isLive ? 'game-card live' : isDone ? 'game-card finished' : 'game-card';
-
-  const badge = isLive
-    ? `<span class="game-card-badge badge-live">🔴 AO VIVO${e.intProgress?" · "+e.intProgress+"'":""}</span>`
-    : isDone
-    ? `<span class="game-card-badge badge-done">✅ Encerrado</span>`
-    : `<span class="game-card-badge badge-next">🕐 ${fmtTime(e.dateEventLocal||e.dateEvent)}</span>`;
-
-  const score = isLive || isDone
-    ? `<div class="game-score">${e.intHomeScore??0} : ${e.intAwayScore??0}</div>`
-    : `<div class="game-score pending">VS</div>`;
-
-  return `<div class="${cardClass}">
-    ${badge}
-    <div class="game-teams">
-      <div class="game-team-name">${e.strHomeTeam}</div>
-      <div class="game-team-flag">${flag(e.strHomeTeam)}</div>
-      ${score}
-      <div class="game-team-flag">${flag(e.strAwayTeam)}</div>
-      <div class="game-team-name">${e.strAwayTeam}</div>
-    </div>
-    ${e.strVenue ? `<div class="game-venue">${e.strVenue}</div>` : ""}
-  </div>`;
-}
-
-async function updateScores() {
-  const card = document.getElementById("live-card");
-  const { live, next, past } = await fetchTodayWC();
-
-  // Combinar: ao vivo primeiro, depois próximos, depois finalizados
-  const todos = [
-    ...live.map(e => ({e, status:'live'})),
-    ...next.map(e => ({e, status:'next'})),
-    ...past.map(e => ({e, status:'done'})),
-  ];
-
-  if (!todos.length) {
-    card.innerHTML = `<span class="live-empty">Sem jogos da Copa hoje</span>`;
-    setTimeout(updateScores, 120000);
-    return;
-  }
-
-  card.innerHTML = `<div class="games-grid">${todos.map(({e,status})=>makeCard(e,status)).join("")}</div>`;
-
-  // Atualiza mais rápido se tiver jogo ao vivo
-  setTimeout(updateScores, live.length ? 30000 : 60000);
-}
-
-updateScores();
+// ── JOGOS DO DIA — Copa do Mundo 2026 ──────────────────────────
+// Proxy CORS para contornar restrições do browser
+// Placar via ScoreAxis iframe
 </script>
 
 
