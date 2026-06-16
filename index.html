@@ -180,10 +180,111 @@ h1 {
   background: linear-gradient(90deg, #006847, #F5C518);
 }
 
+
+/* CARDS DE JOGOS */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.8rem;
+  width: 100%;
+}
+.game-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: border-color .2s;
+  position: relative;
+  overflow: hidden;
+}
+.game-card:hover { border-color: #333; }
+.game-card.live { border-color: #c0392b; }
+.game-card.finished { border-color: #006847; opacity: 0.7; }
+.game-card-badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+.badge-live { background: #c0392b; color: #fff; animation: pulse 1.5s infinite; }
+.badge-next { background: #1a1a2e; color: #888; border: 1px solid #333; }
+.badge-done { background: #0a2a1a; color: #2ecc71; }
+.game-time {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  color: #666;
+  letter-spacing: 1px;
+}
+.game-teams {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+}
+.game-team-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #ccc;
+  text-align: center;
+  flex: 1;
+  line-height: 1.2;
+}
+.game-team-flag { font-size: 1.6rem; }
+.game-score {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: #F5C518;
+  letter-spacing: 3px;
+  line-height: 1;
+}
+.game-score.pending { color: #444; font-size: 1.2rem; letter-spacing: 2px; }
+.game-venue {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  color: #444;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+.live-section {
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+}
+.live-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #555;
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+.live-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  min-height: 80px;
+}
+
 /* PLACAR AO VIVO */
-.live-section { max-width: 1100px; margin: 0 auto 2rem; }
-.live-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: #555; text-align: center; margin-bottom: 0.8rem; }
-.live-card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 1.2rem 2rem; display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: wrap; min-height: 90px; }
+/* cards css inserido acima */
+
+
 .live-badge { background: #c0392b; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; letter-spacing: 2px; padding: 3px 10px; border-radius: 20px; animation: pulse 1.5s infinite; }
 .live-badge.finished { background: #006847; animation: none; }
 .live-badge.upcoming { background: #444; animation: none; }
@@ -499,62 +600,87 @@ function flag(n){return flagMap[n]||"⚽";}
 function fmtTime(s){if(!s)return"";const d=new Date(s);return d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:"America/Sao_Paulo"});}
 function fmtDate(s){if(!s)return"";const d=new Date(s);return d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",timeZone:"America/Sao_Paulo"});}
 
-async function fetchLive(){try{const r=await fetch(`${API}/eventslive.php?sport=Soccer`);const d=await r.json();return(d.events||[]).filter(e=>e.idLeague==="4429"||e.idLeague===4429||(e.strLeague&&e.strLeague.toLowerCase().includes("world cup")&&!e.strLeague.toLowerCase().includes("women")));}catch{return[];}}
-async function fetchNext(){try{const r=await fetch(`${API}/eventsnextleague.php?id=${LID}`);const d=await r.json();return d.events||[];}catch{return[];}}
-async function fetchLast(){try{const r=await fetch(`${API}/eventspastleague.php?id=${LID}`);const d=await r.json();return d.events||[];}catch{return[];}}
-
-function renderLive(evs){
-  if(!evs.length)return false;
-  document.getElementById("live-card").innerHTML=evs.map(e=>`
-    <div style="text-align:center"><span class="live-badge">🔴 AO VIVO${e.intProgress?" · "+e.intProgress+"'":""}</span></div>
-    <div class="live-team"><span>${flag(e.strHomeTeam)}</span><span>${e.strHomeTeam}</span></div>
-    <div class="live-score">${e.intHomeScore??"–"} : ${e.intAwayScore??"–"}</div>
-    <div class="live-team"><span>${e.strAwayTeam}</span><span>${flag(e.strAwayTeam)}</span></div>
-    <div class="live-info">${e.strVenue||""}</div>
-  `).join('<div style="width:1px;height:60px;background:#222;margin:0 1rem"></div>');
-  return true;
+// Seleciona apenas jogos da Copa do Mundo do dia
+function isToday(dateStr) {
+  if(!dateStr) return false;
+  const d = new Date(dateStr);
+  const today = new Date();
+  return d.toDateString() === today.toDateString();
 }
 
-function renderNext(evs){
-  const up=evs.slice(0,3);
-  if(!up.length){document.getElementById("live-card").innerHTML='<span class="live-empty">Nenhum jogo agendado</span>';return;}
-  document.getElementById("live-card").innerHTML=`
-    <div style="width:100%">
-      <div style="text-align:center;margin-bottom:0.8rem"><span class="live-badge upcoming">📅 Próximos Jogos</span></div>
-      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center">
-        ${up.map(e=>`<div class="live-next">
-          <div class="match-time">${fmtDate(e.dateEvent)} · ${fmtTime(e.dateEventLocal||e.dateEvent)}</div>
-          <div class="match-teams">${flag(e.strHomeTeam)} ${e.strHomeTeam} <span style="color:#555">x</span> ${e.strAwayTeam} ${flag(e.strAwayTeam)}</div>
-        </div>`).join('<div style="width:1px;background:#222;flex-shrink:0"></div>')}
-      </div>
-    </div>`;
+async function fetchTodayWC() {
+  try {
+    // Busca jogos ao vivo
+    const rLive = await fetch(`${API}/eventslive.php?sport=Soccer`);
+    const dLive = await rLive.json();
+    const live = (dLive.events||[]).filter(e =>
+      e.idLeague==="4429"||e.idLeague===4429||
+      (e.strLeague&&e.strLeague.toLowerCase().includes("world cup")&&!e.strLeague.toLowerCase().includes("women"))
+    );
+
+    // Busca próximos
+    const rNext = await fetch(`${API}/eventsnextleague.php?id=${LID}`);
+    const dNext = await rNext.json();
+    const next = (dNext.events||[]).filter(e => isToday(e.dateEvent));
+
+    // Busca finalizados do dia
+    const rLast = await fetch(`${API}/eventspastleague.php?id=${LID}`);
+    const dLast = await rLast.json();
+    const past = (dLast.events||[]).filter(e => isToday(e.dateEvent));
+
+    return { live, next, past };
+  } catch(e) { return { live:[], next:[], past:[] }; }
 }
 
-function renderLast(evs){
-  const rec=evs.slice(-3).reverse();
-  if(!rec.length){document.getElementById("live-card").innerHTML='<span class="live-empty">Sem dados disponíveis</span>';return;}
-  document.getElementById("live-card").innerHTML=`
-    <div style="width:100%">
-      <div style="text-align:center;margin-bottom:0.8rem"><span class="live-badge finished">✅ Últimos Resultados</span></div>
-      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center">
-        ${rec.map(e=>`<div class="live-next">
-          <div style="font-size:0.75rem;color:#555;font-family:'Barlow Condensed',sans-serif;margin-bottom:0.2rem">${fmtDate(e.dateEvent)}</div>
-          <div class="match-teams">${flag(e.strHomeTeam)} ${e.strHomeTeam}</div>
-          <div class="live-score" style="font-size:2rem">${e.intHomeScore} : ${e.intAwayScore}</div>
-          <div class="match-teams">${flag(e.strAwayTeam)} ${e.strAwayTeam}</div>
-        </div>`).join('<div style="width:1px;background:#222;flex-shrink:0"></div>')}
-      </div>
-    </div>`;
+function makeCard(e, status) {
+  const isLive = status === 'live';
+  const isDone = status === 'done';
+  const cardClass = isLive ? 'game-card live' : isDone ? 'game-card finished' : 'game-card';
+
+  const badge = isLive
+    ? `<span class="game-card-badge badge-live">🔴 AO VIVO${e.intProgress?" · "+e.intProgress+"'":""}</span>`
+    : isDone
+    ? `<span class="game-card-badge badge-done">✅ Encerrado</span>`
+    : `<span class="game-card-badge badge-next">🕐 ${fmtTime(e.dateEventLocal||e.dateEvent)}</span>`;
+
+  const score = isLive || isDone
+    ? `<div class="game-score">${e.intHomeScore??0} : ${e.intAwayScore??0}</div>`
+    : `<div class="game-score pending">VS</div>`;
+
+  return `<div class="${cardClass}">
+    ${badge}
+    <div class="game-teams">
+      <div class="game-team-name">${e.strHomeTeam}</div>
+      <div class="game-team-flag">${flag(e.strHomeTeam)}</div>
+      ${score}
+      <div class="game-team-flag">${flag(e.strAwayTeam)}</div>
+      <div class="game-team-name">${e.strAwayTeam}</div>
+    </div>
+    ${e.strVenue ? `<div class="game-venue">${e.strVenue}</div>` : ""}
+  </div>`;
 }
 
-async function updateScores(){
-  const live=await fetchLive();
-  if(renderLive(live)){setTimeout(updateScores,30000);return;}
-  const next=await fetchNext();
-  if(next.length){renderNext(next);setTimeout(updateScores,60000);return;}
-  const last=await fetchLast();
-  renderLast(last);
-  setTimeout(updateScores,120000);
+async function updateScores() {
+  const card = document.getElementById("live-card");
+  const { live, next, past } = await fetchTodayWC();
+
+  // Combinar: ao vivo primeiro, depois próximos, depois finalizados
+  const todos = [
+    ...live.map(e => ({e, status:'live'})),
+    ...next.map(e => ({e, status:'next'})),
+    ...past.map(e => ({e, status:'done'})),
+  ];
+
+  if (!todos.length) {
+    card.innerHTML = `<span class="live-empty">Sem jogos da Copa hoje</span>`;
+    setTimeout(updateScores, 120000);
+    return;
+  }
+
+  card.innerHTML = `<div class="games-grid">${todos.map(({e,status})=>makeCard(e,status)).join("")}</div>`;
+
+  // Atualiza mais rápido se tiver jogo ao vivo
+  setTimeout(updateScores, live.length ? 30000 : 60000);
 }
 
 updateScores();
